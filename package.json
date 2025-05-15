@@ -1,0 +1,29 @@
+{
+  "name": "waffle-test-be",
+  "version": "1.0.0",
+  "description": "Backend",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Null-Cat/Waffle-Test-BE.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Null-Cat/Waffle-Test-BE/issues"
+  },
+  "homepage": "https://github.com/Null-Cat/Waffle-Test-BE#readme",
+  "dependencies": {
+    "cli-color": "^2.0.4",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
