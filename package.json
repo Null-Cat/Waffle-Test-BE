@@ -20,7 +20,9 @@
   },
   "homepage": "https://github.com/Null-Cat/Waffle-Test-BE#readme",
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
     "cli-color": "^2.0.4",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0"
   },
   "devDependencies": {
