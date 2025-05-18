@@ -200,3 +200,42 @@ function getTrueIP(req) {
     ? req.headers["x-forwarded-for"].split(",")[0]
     : req.socket.remoteAddress.replace("::ffff:", "");
 }
+
+/**
+ * Retrieves a Sudoku board with the specified difficulty.
+ * Keeps trying until a board with the desired difficulty is found.
+ *
+ * @param {string} difficulty - The desired difficulty level
+ * @returns {Promise<Object>} A promise that resolves to the board object
+ */
+async function getBoard(difficulty = "any") {
+  const targetDifficulty = difficulty.toLowerCase();
+
+  while (true) {
+    try {
+      const response = await fetch(`https://sudoku-api.vercel.app/api/dosuku`);
+      const data = await response.json();
+
+      console.log(
+        `Retrieved board with difficulty: ${data.newboard.grids[0].difficulty}`
+      );
+      if (
+        (data.newboard.grids[0].difficulty &&
+          data.newboard.grids[0].difficulty.toLowerCase() ===
+            targetDifficulty) ||
+        targetDifficulty === "any"
+      ) {
+        console.log(
+          `Found board with desired difficulty: ${data.newboard.grids[0].difficulty}`
+        );
+        return data.newboard.grids[0];
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+    } catch (error) {
+      console.error("Error:", error);
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+    }
+  }
+}
+
