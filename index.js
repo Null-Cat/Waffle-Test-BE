@@ -97,7 +97,7 @@ app.post("/solve", async (req, res) => {
   console.log(
     `${clc.yellow(
       `${getLogTimestamp()} Board ID: ${clc.cyanBright(
-        req.boardID
+        req.body.boardID
       )} Received board:`
     )} ${clc.blue(JSON.stringify(req.body.board))}`
   );
@@ -144,6 +144,73 @@ app.post("/solve", async (req, res) => {
 
   return res.status(400).json({
     message: "Board not solved",
+  });
+});
+
+app.post("/hint", async (req, res) => {
+  console.log(
+    `${clc.yellow(
+      `${getLogTimestamp()} Board ID: ${clc.cyanBright(
+        req.body.boardID
+      )} Received board:`
+    )} ${clc.blue(JSON.stringify(req.body.board))}`
+  );
+  if (!req.body.board) {
+    return res.status(400).json({
+      message: "No board provided",
+    });
+  }
+
+  let { data: boards, error } = await supabase
+    .from("boards")
+    .select("solution")
+    .eq("id", req.body.boardID);
+  if (error) {
+    console.error(
+      `${clc.red(`${getLogTimestamp()} Error fetching board:`)} ${clc.red(
+        error.message
+      )}`
+    );
+    return res.status(500).json({
+      message: "Error fetching board",
+    });
+  }
+  if (!boards || boards.length === 0) {
+    console.log(
+      `${clc.yellow(`${getLogTimestamp()} No board found in database`)}`
+    );
+    return res.status(404).json({
+      message: "No board found",
+    });
+  }
+  console.log(
+    `${clc.green(`${getLogTimestamp()} Fetched board:`)} ${clc.blue(
+      JSON.stringify(boards[0])
+    )}`
+  );
+
+  for (let i = 0; i < req.body.board.length; i++) {
+    for (let j = 0; j < req.body.board[i].length; j++) {
+      if (req.body.board[i][j] === 0) {
+        req.body.board[i][j] = boards[0].solution[i][j];
+        console.log(
+          `${clc.green(
+            `${getLogTimestamp()} Hint provided for cell [${i}][${j}]: ${
+              boards[0].solution[i][j]
+            }`
+          )}`
+        );
+        return res.status(200).json({
+          parentCellIndex: i,
+          innerCellIndex: j,
+          hint: boards[0].solution[i][j],
+        });
+      }
+    }
+  }
+
+  return res.status(400).json({
+    message: "No hint available",
   });
 });
 
