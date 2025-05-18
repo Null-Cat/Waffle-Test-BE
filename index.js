@@ -23,7 +23,33 @@ app.use(express.json());
 
 app.use(LogConnections);
 
-app.get("/board", async (req, res) => {
+app.get("/random", async (req, res) => {
+  console.log(
+    `${clc.yellow(`${getLogTimestamp()} Received request for random board`)}`
+  );
+  const board = await getBoard();
+  if (!board) {
+    return res.status(500).json({
+      message: "Error fetching board",
+    });
+  }
+  console.log(
+    `${clc.green(`${getLogTimestamp()} Fetched board:`)} ${clc.blue(
+      JSON.stringify(board)
+    )}`
+  );
+  const boardID = await storeBoard(board);
+  const jsonResponse = {
+    id: boardID,
+    value: board.value,
+    difficulty: board.difficulty,
+  };
+  setTimeout(async () => {
+    res.json(jsonResponse);
+  }, 1000);
+});
+
+app.get("/daily", async (req, res) => {
   let { data: boards, error } = await supabase
     .from("boards")
     .select("id, unsolved")
