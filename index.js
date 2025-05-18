@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 const clc = require("cli-color");
 const schedule = require("node-schedule");
 const { createClient } = require("@supabase/supabase-js");
@@ -16,6 +17,19 @@ const supabase = createClient(
 );
 const app = express();
 const port = process.env.PORT || 3600;
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost",
+      "https://waffle.philipwhite.dev",
+      "https://waffle.philipwhite.dev:443",
+    ],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+  })
+);
 app.enable("trust proxy");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
