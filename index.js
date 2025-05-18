@@ -14,6 +14,13 @@ const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_KEY
 );
+const app = express();
+const port = process.env.PORT || 3600;
+app.enable("trust proxy");
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.use(LogConnections);
 
 // Get Daily Boards at 2 AM UTC
 schedule.scheduleJob("0 2 * * *", async () => {
@@ -44,14 +51,6 @@ schedule.scheduleJob("0 2 * * *", async () => {
     );
   }
 });
-
-const app = express();
-const port = process.env.PORT || 3000;
-app.enable("trust proxy");
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
-app.use(LogConnections);
 
 app.get("/random", async (req, res) => {
   console.log(
