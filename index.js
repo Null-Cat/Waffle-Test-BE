@@ -53,7 +53,8 @@ app.get("/daily", async (req, res) => {
   let { data: boards, error } = await supabase
     .from("boards")
     .select("id, unsolved")
-    .eq("difficulty", req.query.difficulty)
+    .eq("difficulty", req.query.difficulty.toString().toUpperCase())
+    .eq("is_daily", true)
     .gte("created_at", new Date(new Date().setHours(0, 0, 0, 0)).toISOString())
     .lte(
       "created_at",
@@ -87,10 +88,12 @@ app.get("/daily", async (req, res) => {
     id: unsolvedBoard.id,
     value: unsolvedBoard.unsolved,
   };
-  res.json(jsonResponse);
+  setTimeout(async () => {
+    res.json(jsonResponse);
+  }, 1000);
 });
 
-app.post("/solved", async (req, res) => {
+app.post("/solve", async (req, res) => {
   console.log(
     `${clc.yellow(
       `${getLogTimestamp()} Board ID: ${clc.cyanBright(
@@ -107,12 +110,7 @@ app.post("/solved", async (req, res) => {
   let { data: boards, error } = await supabase
     .from("boards")
     .select("solution")
-    .eq("id", req.body.boardID)
-    .gte("created_at", new Date(new Date().setHours(0, 0, 0, 0)).toISOString())
-    .lte(
-      "created_at",
-      new Date(new Date().setHours(23, 59, 59, 999)).toISOString()
-    );
+    .eq("id", req.body.boardID);
   if (error) {
     console.error(
       `${clc.red(`${getLogTimestamp()} Error fetching board:`)} ${clc.red(
