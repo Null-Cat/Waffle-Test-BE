@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const clc = require("cli-color");
+const schedule = require("node-schedule");
 const { createClient } = require("@supabase/supabase-js");
 
 if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
@@ -9,11 +10,40 @@ if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
   );
   process.exit(1);
 }
-
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_KEY
 );
+
+// Get Daily Boards at 2 AM UTC
+schedule.scheduleJob("0 2 * * *", async () => {
+  console.log(`${clc.yellow(`${getLogTimestamp()} Scheduled job running...`)}`);
+  const difficulties = ["Easy", "Medium", "Hard"];
+  for (const difficulty of difficulties) {
+    console.log(
+      `${clc.yellow(
+        `${getLogTimestamp()} Fetching daily board with difficulty: ${difficulty}`
+      )}`
+    );
+    const board = await getBoard(difficulty);
+    if (!board) {
+      return console.error(
+        `${clc.red(`${getLogTimestamp()} Error fetching board`)}`
+      );
+    }
+    console.log(
+      `${clc.green(`${getLogTimestamp()} Fetched board:`)} ${clc.blue(
+        JSON.stringify(board)
+      )}`
+    );
+    const boardID = await storeBoard(board, true);
+    console.log(
+      `${clc.green(
+        `${getLogTimestamp()} Stored daily board with ID:`
+      )} ${clc.blue(boardID)}`
+    );
+  }
+});
 
 const app = express();
 const port = process.env.PORT || 3000;
