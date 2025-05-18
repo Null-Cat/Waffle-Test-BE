@@ -239,3 +239,25 @@ async function getBoard(difficulty = "any") {
   }
 }
 
+async function storeBoard(board, isDaily = false) {
+  const { value, solution } = board;
+  const { data, error } = await supabase
+    .from("boards")
+    .insert([
+      {
+        unsolved: value,
+        solution: solution,
+        difficulty: board.difficulty.toUpperCase(),
+        is_daily: isDaily,
+      },
+    ])
+    .select("id");
+
+  if (error) {
+    console.error("Error inserting board:", error);
+    throw error;
+  } else {
+    console.log("Board inserted:", data);
+    return data[0].id;
+  }
+}
