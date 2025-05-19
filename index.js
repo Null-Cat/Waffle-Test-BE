@@ -36,8 +36,8 @@ app.use(express.json());
 
 app.use(LogConnections);
 
-// Get Daily Boards at 2 AM UTC
-schedule.scheduleJob("0 2 * * *", async () => {
+// Retrieve the daily boards every day at midnight
+schedule.scheduleJob("0 0 * * *", async () => {
   console.log(`${clc.yellow(`${getLogTimestamp()} Scheduled job running...`)}`);
   const difficulties = ["Easy", "Medium", "Hard"];
   for (const difficulty of difficulties) {
@@ -347,6 +347,18 @@ async function getBoard(difficulty = "any") {
   }
 }
 
+/**
+ * Stores a board in the database using Supabase.
+ *
+ * @async
+ * @param {Object} board - The board to store
+ * @param {string} board.value - The unsolved state of the board
+ * @param {string} board.solution - The solved state of the board
+ * @param {string} board.difficulty - The difficulty level of the board (will be converted to uppercase)
+ * @param {boolean} [isDaily=false] - Whether this board is a daily challenge
+ * @returns {Promise<number|string>} The ID of the stored board
+ * @throws {Error} If there's an error inserting the board into the database
+ */
 async function storeBoard(board, isDaily = false) {
   const { value, solution } = board;
   const { data, error } = await supabase
