@@ -66,6 +66,11 @@ schedule.scheduleJob("0 0 * * *", async () => {
   }
 });
 
+// Endpoint to retrieve a random board
+// This endpoint is used by the client to get a random board
+// It will fetch a board from the API and store it in the database
+// It will return the ID of the board and the difficulty
+// The client will use this ID to retrieve the board later
 app.get("/random", async (req, res) => {
   console.log(
     `${clc.yellow(`${getLogTimestamp()} Received request for random board`)}`
@@ -92,6 +97,11 @@ app.get("/random", async (req, res) => {
   }, 1000);
 });
 
+// Endpoint to retrieve a daily board
+// This endpoint is used by the client to get a daily board
+// It will fetch a board from the database and return it
+// It will return the ID of the board and the unsolved state
+// The client will use this ID to retrieve the board later
 app.get("/daily", async (req, res) => {
   let { data: boards, error } = await supabase
     .from("boards")
@@ -136,6 +146,14 @@ app.get("/daily", async (req, res) => {
   }, 1000);
 });
 
+// Endpoint to check if a board is solved
+// This endpoint is used by the client to check if a board is solved
+// It will fetch the board from the database and compare it to the provided board
+// It will return a 200 status if the board is solved, 400 if not
+// It will return a 404 status if the board is not found
+// It will return a 500 status if there is an error fetching the board
+// It will return a 400 status if no board is provided
+// It will return a 400 status if the board is not solved
 app.post("/solve", async (req, res) => {
   console.log(
     `${clc.yellow(
@@ -190,6 +208,14 @@ app.post("/solve", async (req, res) => {
   });
 });
 
+// Endpoint to obtain a hint for the board
+// This endpoint is used by the client to get a hint for the board
+// It will fetch the board from the database and compare it to the provided board
+// It will return a 200 status if a hint is available along with the hint which comprises of the cell index and the hint value
+// It will return a 400 status if no hint is available
+// It will return a 404 status if the board is not found
+// It will return a 500 status if there is an error fetching the board
+// It will return a 400 status if no board is provided
 app.post("/hint", async (req, res) => {
   console.log(
     `${clc.yellow(
