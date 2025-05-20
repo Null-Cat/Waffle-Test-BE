@@ -42,7 +42,7 @@ Retrieves a random Sudoku board.
 
 ```json
 {
-  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "id": "123",
   "value": [
     [5, 3, 0, 0, 7, 0, 0, 0, 0],
     [6, 0, 0, 1, 9, 5, 0, 0, 0],
@@ -85,7 +85,7 @@ GET /daily?difficulty=Medium
 
 ```json
 {
-  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "id": "23",
   "value": [
     [5, 3, 0, 0, 7, 0, 0, 0, 0],
     [6, 0, 0, 1, 9, 5, 0, 0, 0],
@@ -126,7 +126,7 @@ Checks if a provided board solution is correct.
 
 ```json
 {
-  "boardID": "123e4567-e89b-12d3-a456-426614174000",
+  "boardID": "234",
   "board": [
     [5, 3, 4, 6, 7, 8, 9, 1, 2],
     [6, 7, 2, 1, 9, 5, 3, 4, 8],
@@ -198,7 +198,7 @@ Provides a hint for a specific position on the board.
 
 ```json
 {
-  "boardID": "123e4567-e89b-12d3-a456-426614174000",
+  "boardID": "21",
   "board": [
     [5, 3, 0, 0, 7, 0, 0, 0, 0],
     [6, 0, 0, 1, 9, 5, 0, 0, 0],
