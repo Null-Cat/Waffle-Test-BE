@@ -1,6 +1,6 @@
 # Waffle Test Submission Backend API
 
-Backend API service for the Waffle Sudoku application. This service provides endpoints for retrieving random and daily Sudoku boards, checking solutions, and getting hints.
+Backend API service for the Waffle Sudoku frontend. This service provides endpoints for retrieving random and daily Sudoku boards, checking solutions, and getting hints.
 
 ## Getting Started
 
