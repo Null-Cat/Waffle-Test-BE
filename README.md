@@ -2,6 +2,10 @@
 
 Backend API service for the Waffle Sudoku frontend. This service provides endpoints for retrieving random and daily Sudoku boards, checking solutions, and getting hints.
 
+### Project Management
+
+[Plane Kanban Board](https://plane.philipwhite.dev/spaces/issues/cf8346bdf96f4e1c87b1951c9fec2706)
+
 ## Getting Started
 
 ### Prerequisites
@@ -257,3 +261,7 @@ In this example, the hint is for the cell at position [0][2] (first row, third c
 - Uses Supabase for database storage
 - Scheduled job runs at midnight to generate new daily boards
 - CORS enabled for specific origins
+
+### Frontend Repo
+
+[Waffle Sudoku Frontend](https://github.com/Null-Cat/Waffle-Test-FE)
